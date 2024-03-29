@@ -21,6 +21,7 @@ const headers = ref([
   { title: "Nom", value: "nom", sortable: true },
   { title: "Nombre d'heures", value: "nbHeure", sortable: true },
   { title: "Taux horaire", value: "tauxHoraire", sortable: true },
+  { title: "Salaire", value: "salaire" },
   { title: "Action", value: "action" },
 ]);
 </script>
