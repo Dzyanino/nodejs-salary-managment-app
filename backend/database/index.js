@@ -8,10 +8,15 @@ const conProps = {
     host: "192.168.56.103",
     dialect: "postgres"
 };
-
 const sequelize = new Sequelize(conProps.databaseName, conProps.username, conProps.password, {
     host: conProps.host,
-    dialect: conProps.dialect
+    dialect: conProps.dialect,
+    pool: {
+        max: 10,
+        min: 0,
+        acquire: 30000,
+        idle: 10000
+    }
 });
 
 const SalEns = SalEnsModel(sequelize, DataTypes);

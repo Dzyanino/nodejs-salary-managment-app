@@ -20,7 +20,8 @@ module.exports = (sequelize, dataTypes) => {
         }
     },
     {
-        tableName: "salaireEnseignant"
+        tableName: "salaireEnseignant",
+        timestamps: false
     });
 
     return SalEns;
