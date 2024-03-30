@@ -34,7 +34,7 @@
       </v-list-item>
     </v-navigation-drawer>
 
-    <v-main class="bg-grey-lighten-1">
+    <v-main class="bg-teal-lighten-4">
       <Index />
     </v-main>
 

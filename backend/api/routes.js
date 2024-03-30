@@ -10,6 +10,11 @@ router.get('/enseignants', async (request, response) => {
     response.json(enseignants);
 });
 
+router.get('/maxies', async (request, response) => {
+    const enseignants = await SalEns.findAll({ limit: 25, order: [ 'numEns' ] });
+    response.json(enseignants);
+});
+
 
 router.post('/edit-enseignant', [
     body("numEns").isInt().notEmpty(),

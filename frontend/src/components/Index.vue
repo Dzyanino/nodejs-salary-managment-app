@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
       <v-responsive>
-          <v-row>
+          <v-row class="d-flex align-center">
             <v-col cols="12" md="4">
               <Graphe />
             </v-col>

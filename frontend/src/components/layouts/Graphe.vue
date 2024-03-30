@@ -1,25 +1,37 @@
 <template>
-    <canvas id="graphe" class="bg-white">
-    </canvas>
+  <div class="flip-card my-16">
+    <div class="flip-card-inner bg-white rounded-lg elevation-16">
+      <div class="flip-card-front">
+        <canvas id="graphe" class="px-4 py-1">
+        </canvas>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+// import { $get } from "../../plugins/axios"
 
-onMounted(() => {
-  const dest = document.getElementById("graphe");
+const dest = ref(null);
+const items = ref([]);
 
-  new Chart(dest, {
+onMounted( async () => {
+  dest.value = document.getElementById("graphe");
+  // items.value = await $get("maxies");
+  // console.log(items.value);
+
+  new Chart(dest.value, {
     type: "doughnut",
     data: {
       labels: ["SALAIRE MINIMUM", "SALAIRE MAXIMUM", "MONTANT TOTAL"],
       datasets: [{
         label: "",
-        data: [15, 25, 5],
+        data: [5, 20, 25],
         backgroundColor: [
-          "#ffb3b3",
-          "#66ff99",
-          "#80ccff"
+          "#FFECB3",
+          "#B2DFDB",
+          "#F0F4C3"
         ],
         borderColor: [
           "#ff0000",
@@ -41,7 +53,24 @@ onMounted(() => {
 </script>
 
 <style scoped>
-#chart {
-  transform: rotateY(5deg);
+
+.flip-card {
+  background-color: transparent;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card .flip-card-inner {
+  transform: rotateY(20deg);
+}
+
+.flip-card-front {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 </style>
