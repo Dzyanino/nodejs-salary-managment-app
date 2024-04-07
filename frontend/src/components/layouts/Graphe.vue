@@ -1,6 +1,6 @@
 <template>
   <div class="flip-card my-16">
-    <div class="flip-card-inner bg-white rounded-lg elevation-16">
+    <div class="flip-card-inner border rounded-xl bg-white">
       <div class="flip-card-front">
         <canvas id="graphe" class="px-4 py-1">
         </canvas>
@@ -16,7 +16,7 @@ import { $get } from "../../plugins/axios"
 const dest = ref(null);
 const items = ref([]);
 
-onMounted( async () => {
+onMounted(async () => {
   dest.value = document.getElementById("graphe");
   items.value = await $get("maxies");
   items.value = items.value.shift();
@@ -26,7 +26,6 @@ onMounted( async () => {
     data: {
       labels: ["SALAIRE MINIMUM", "SALAIRE MAXIMUM", "MONTANT TOTAL"],
       datasets: [{
-        label: "",
         data: [items.value.minSalaire, items.value.maxSalaire, items.value.totalSalaire],
         backgroundColor: [
           "#FFECB3",
@@ -34,9 +33,11 @@ onMounted( async () => {
           "#F0F4C3"
         ],
         borderColor: [
-          "#ff0000",
-          "#00e64d",
-          "#0099ff"
+          // "white"
+          "rgba(0, 0, 0, 0.1)"
+          // "#ff0000",
+          // "#00e64d",
+          // "#0099ff"
         ],
         borderWidth: 3
       }]
@@ -53,10 +54,9 @@ onMounted( async () => {
 </script>
 
 <style scoped>
-
 .flip-card {
   background-color: transparent;
-  perspective: 1000px;
+  perspective: 1500px;
 }
 
 .flip-card-inner {
@@ -65,7 +65,7 @@ onMounted( async () => {
   transform-style: preserve-3d;
 }
 
-.flip-card .flip-card-inner {
+.flip-card:hover .flip-card-inner {
   transform: rotateY(20deg);
 }
 

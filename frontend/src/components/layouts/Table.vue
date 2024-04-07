@@ -1,7 +1,19 @@
 <template>
   <v-container fluid>
     <v-responsive class="align-center text-center">
-      <v-data-table id="tableau" :headers="tableHeaders" :items="tableItems" class="elevation-1 rounded">
+      <v-row class="align-center mb-2 mb-md-0">
+        <v-col cols="12" md="6">
+          <v-text-field single-line hide-details clearable flat rounded="pill" v-model="search" variant="solo"
+            bg-color="white" label="Rechercher" prepend-inner-icon="mdi-magnify"
+            class="border rounded-pill"></v-text-field>
+        </v-col>
+        <v-col cols="12" md="3" offset-md="3" class="d-flex justify-end">
+          <v-btn prepend-icon="mdi-plus" color="primary">Ajouter</v-btn>
+        </v-col>
+      </v-row>
+      <v-data-table hover fixed-header id="tableau" :headers="tableHeaders" :items="tableItems" :search="search"
+        height="500" class="border rounded-lg">
+
         <template v-slot:headers>
           <tr>
             <template v-for="header in tableHeaders" :key="header.value">
@@ -34,6 +46,12 @@
           </tr>
         </template>
 
+        <!-- <template v-slot:no-data>
+            <tr>
+              <td class="">Rien n'a été trouvé</td>
+            </tr>
+        </template> -->
+
         <!-- <template v-slot:footers>
           <p>{{ maxies[0].minSalaire }}</p>
         </template> -->
@@ -54,7 +72,7 @@
               </v-col>
 
               <v-col cols="12" md="6" offset="0" offset-md="1">
-                <v-text-field variant="outlined" label="Taux horaire"  v-model="tauxHoraireEnseignant"></v-text-field>
+                <v-text-field variant="outlined" label="Taux horaire" v-model="tauxHoraireEnseignant"></v-text-field>
               </v-col>
 
             </v-row>
@@ -82,6 +100,8 @@ const tableHeaders = [
 
 const tableItems = ref([]);
 const maxies = ref([]);
+
+const search = ref(null);
 
 let message = null;
 
