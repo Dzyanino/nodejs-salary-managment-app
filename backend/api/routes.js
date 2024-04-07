@@ -76,7 +76,7 @@ router.post('/add-enseignant', [
 
 // DELETE ONE --------------------------------------------------------------------
 router.delete('/remove-enseignant', [
-    body("numEns").isInt().notEmpty(),
+    body("numEns").isInt().notEmpty()
 ], async (request, response) => {
     const validationErrors = validationResult(request);
     if (!validationErrors.isEmpty()) {
