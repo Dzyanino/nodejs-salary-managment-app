@@ -11,15 +11,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-// import { $get } from "../../plugins/axios"
+import { $get } from "../../plugins/axios"
 
 const dest = ref(null);
 const items = ref([]);
 
 onMounted( async () => {
   dest.value = document.getElementById("graphe");
-  // items.value = await $get("maxies");
-  // console.log(items.value);
+  items.value = await $get("maxies");
+  // console.log(items.value[0].minSalaire);
 
   new Chart(dest.value, {
     type: "doughnut",
@@ -27,7 +27,7 @@ onMounted( async () => {
       labels: ["SALAIRE MINIMUM", "SALAIRE MAXIMUM", "MONTANT TOTAL"],
       datasets: [{
         label: "",
-        data: [5, 20, 25],
+        data: [items.value[0].minSalaire, items.value[0].maxSalaire, items.value[0].totalSalaire],
         backgroundColor: [
           "#FFECB3",
           "#B2DFDB",

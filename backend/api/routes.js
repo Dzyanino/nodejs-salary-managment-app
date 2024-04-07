@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { SalEns } = require("../database")
+const { SalEns, sequelize } = require("../database")
 const { body, validationResult } = require("express-validator")
 
 
@@ -10,7 +10,13 @@ router.get('/enseignants', async (request, response) => {
     response.json(enseignants);
 });
 router.get('/maxies', async (request, response) => {
-    const enseignants = await SalEns.findAll({ limit: 25, order: [ 'numEns' ] });
+    const enseignants = await SalEns.findAll({
+        attributes: [
+            [ sequelize.fn('MIN', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'minSalaire' ],
+            [ sequelize.fn('MAX', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'maxSalaire' ],
+            [ sequelize.fn('SUM', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'totalSalaire' ]
+        ]
+    });
     response.json(enseignants);
 });
 
