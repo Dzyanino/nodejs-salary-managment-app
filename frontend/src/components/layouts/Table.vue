@@ -5,17 +5,17 @@
         <template v-slot:headers>
           <tr>
             <template v-for="header in tableHeaders" :key="header.value">
-              <th class="text-button text-left border-e">{{ header.title }}</th>
+              <th class="text-button">{{ header.title }}</th>
             </template>
           </tr>
         </template>
 
         <template v-slot:item="{ item }">
           <tr>
-            <td>{{ item.nom }}</td>
-            <td>{{ item.nbHeure }}</td>
-            <td>{{ item.tauxHoraire }}</td>
-            <td>{{ item.nbHeure * item.tauxHoraire }}</td>
+            <td class="text-left">{{ item.nom }}</td>
+            <td class="text-left">{{ item.nbHeure }}</td>
+            <td class="text-left">{{ item.tauxHoraire }}</td>
+            <td class="text-left">{{ item.nbHeure * item.tauxHoraire }}</td>
           </tr>
         </template>
       </v-data-table>
@@ -38,7 +38,7 @@ const tableHeaders = ref([
 const tableItems = ref([]);
 
 
-onMounted(() => {
-  tableItems.value = $get("enseignants");
+onMounted( async() => {
+  tableItems.value = await $get("enseignants");
 })
 </script>

@@ -4,18 +4,18 @@ const { SalEns } = require("../database")
 const { body, validationResult } = require("express-validator")
 
 
-
+// GET ALL --------------------------------------------------------------------
 router.get('/enseignants', async (request, response) => {
     const enseignants = await SalEns.findAll({ limit: 25, order: [ 'numEns' ] });
     response.json(enseignants);
 });
-
 router.get('/maxies', async (request, response) => {
     const enseignants = await SalEns.findAll({ limit: 25, order: [ 'numEns' ] });
     response.json(enseignants);
 });
 
 
+// EDIT ONE --------------------------------------------------------------------
 router.post('/edit-enseignant', [
     body("numEns").isInt().notEmpty(),
     body("nom").isString().notEmpty(),
@@ -37,13 +37,14 @@ router.post('/edit-enseignant', [
                 numEns: request.body.numEns
             }
         });
-        response.status(200).json({ message: "Enseignant modifié" });
+        response.status(200).json({ message: `Enseignant ${request.body.nom} modifié` });
     } catch (error) {
         return response.status(400).json({ erreurs: error })
     }
 });
 
 
+// ADD ONE --------------------------------------------------------------------
 router.post('/add-enseignant', [
     body("nom").isString().notEmpty(),
     body("nbHeure").isFloat().notEmpty(),
@@ -60,13 +61,14 @@ router.post('/add-enseignant', [
             nbHeure: request.body.nbHeure,
             tauxHoraire: request.body.tauxHoraire
         });
-        response.status(200).json({ message: "Enseignant " + enseignant.nom + " ajouté" });
+        response.status(200).json({ message: `Enseignant ${enseignant.nom} ajouté` });
     } catch (error) {
         return response.status(400).json({ erreurs: error })
     }
 });
 
 
+// DELETE ONE --------------------------------------------------------------------
 router.delete('/remove-enseignant', [
     body("numEns").isInt().notEmpty(),
 ], async (request, response) => {
