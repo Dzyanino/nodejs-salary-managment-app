@@ -19,7 +19,7 @@ const items = ref([]);
 onMounted( async () => {
   dest.value = document.getElementById("graphe");
   items.value = await $get("maxies");
-  // console.log(items.value[0].minSalaire);
+  items.value = items.value.shift();
 
   new Chart(dest.value, {
     type: "doughnut",
@@ -27,7 +27,7 @@ onMounted( async () => {
       labels: ["SALAIRE MINIMUM", "SALAIRE MAXIMUM", "MONTANT TOTAL"],
       datasets: [{
         label: "",
-        data: [items.value[0].minSalaire, items.value[0].maxSalaire, items.value[0].totalSalaire],
+        data: [items.value.minSalaire, items.value.maxSalaire, items.value.totalSalaire],
         backgroundColor: [
           "#FFECB3",
           "#B2DFDB",

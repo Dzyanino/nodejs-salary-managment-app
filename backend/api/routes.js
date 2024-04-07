@@ -6,7 +6,7 @@ const { body, validationResult } = require("express-validator")
 
 // GET ALL --------------------------------------------------------------------
 router.get('/enseignants', async (request, response) => {
-    const enseignants = await SalEns.findAll({ limit: 25, order: [ 'numEns' ] });
+    const enseignants = await SalEns.findAll({ order: [ 'numEns' ] }); // limit: 25,
     response.json(enseignants);
 });
 router.get('/maxies', async (request, response) => {
