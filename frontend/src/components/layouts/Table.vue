@@ -1,13 +1,13 @@
 <template>
   <v-col cols="12" md="4">
     <div class="flip-card my-16">
-    <div class="flip-card-inner border rounded-xl bg-white">
-      <div class="flip-card-front">
-        <canvas id="graphe" class="px-4 py-1">
-        </canvas>
+      <div class="flip-card-inner border rounded-xl bg-white">
+        <div class="flip-card-front">
+          <canvas id="graphe" class="px-4 py-1">
+          </canvas>
+        </div>
       </div>
     </div>
-  </div>
   </v-col>
   <v-col cols="12" md="8">
     <v-container fluid>
@@ -22,8 +22,8 @@
             <v-btn prepend-icon="mdi-plus" color="primary" @click="displayAddDialog()">Ajouter</v-btn>
           </v-col>
         </v-row>
-        <v-data-table hover fixed-header id="tableau" :headers="tableHeaders" :items="tableItems" :search="search"
-          height="500" class="border rounded-lg">
+        <v-data-table hover items-per-page-text="Nombre d'éléments par page" fixed-header id="tableau"
+          :headers="tableHeaders" :items="tableItems" :search="search" height="500" class="border rounded-lg">
 
           <template v-slot:headers>
             <tr>
@@ -103,7 +103,8 @@
           </v-card>
         </v-dialog>
 
-        <v-dialog v-model="dialogSupprimer" scrollable persistent max-width="650px" transition="dialog-bottom-transition">
+        <v-dialog v-model="dialogSupprimer" scrollable persistent max-width="650px"
+          transition="dialog-bottom-transition">
           <v-card class="px-2 py-4" rounded="lg">
             <v-card-title primary-title>Supprimer</v-card-title>
             <v-card-item>
@@ -172,6 +173,7 @@
 import { ref, onMounted } from 'vue';
 import { $get, $post, $delete } from "../../plugins/axios"
 
+let theGraph = null;
 const dest = ref(null);
 const items = ref([]);
 
@@ -208,13 +210,18 @@ const nomNew = ref(null);
 const nbHeureNew = ref(null);
 const tauxHoraireNew = ref(null);
 
+
+
 const retrieve = async () => {
   tableItems.value = await $get("enseignants");
   items.value = await $get("maxies");
   items.value = items.value.shift();
   maxies.value = await $get("maxies");
-
-  new Chart(dest.value, {
+}
+onMounted(async () => {
+  dest.value = document.getElementById("graphe");
+  await retrieve();
+  theGraph = new Chart(dest.value, {
     type: "doughnut",
     data: {
       labels: ["SALAIRE MINIMUM", "SALAIRE MAXIMUM", "SALAIRE TOTAL"],
@@ -245,12 +252,19 @@ const retrieve = async () => {
       }
     }
   });
-}
-onMounted(async () => {
-  dest.value = document.getElementById("graphe");
-  await retrieve();
+
+  console.log(theGraph);
 });
 
+
+const updateChart = () => {
+  theGraph.data.datasets[0].data = [
+    items.value.minSalaire,
+    items.value.maxSalaire,
+    items.value.totalSalaire
+  ];
+  theGraph.update();
+}
 
 const prepareData = (idEnseignant) => {
   choosen.value = tableItems.value.filter(item => {
@@ -291,7 +305,8 @@ const editerEnseignant = async (idEnseignant) => {
   snack.value.color = "success";
   snack.value.timeout = 3000;
   snack.value.snackValue = true;
-  retrieve();
+  await retrieve();
+  updateChart();
 };
 
 const supprimerEnseignant = async (idEnseignant) => {
@@ -300,7 +315,8 @@ const supprimerEnseignant = async (idEnseignant) => {
   snack.value.color = "error";
   snack.value.timeout = 6000;
   snack.value.snackValue = true;
-  retrieve();
+  await retrieve();
+  updateChart();
 };
 
 const ajouterEnseignant = async () => {
@@ -314,7 +330,8 @@ const ajouterEnseignant = async () => {
   snack.value.color = "success";
   snack.value.timeout = 3000;
   snack.value.snackValue = true;
-  retrieve();
+  await retrieve();
+  updateChart();
 }
 </script>
 
