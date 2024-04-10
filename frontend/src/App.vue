@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar scroll-behavior="elevate" class="bg-white border-b">
+    <v-app-bar class="bg-white elevation-0 border-b">
       <template v-slot:prepend>
         <v-app-bar-nav-icon class="hidden-sm-and-up rounded" @click.stop="navigation = !navigation">
         </v-app-bar-nav-icon>

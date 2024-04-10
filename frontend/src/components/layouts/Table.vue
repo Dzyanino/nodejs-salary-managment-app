@@ -53,6 +53,14 @@
         </template>
       </v-data-table>
 
+      <v-row class="py-2">
+        <v-col cols="12" class="d-flex justify-space-evenly" v-for="max in maxies" :key="max">
+          <p>Salaire minimum : {{ max.minSalaire }}</p>
+          <p>Salaire maximum : {{ max.maxSalaire }}</p>
+          <p>Montant total : {{ max.totalSalaire }}</p>
+        </v-col>
+      </v-row>
+
       <v-dialog v-model="dialogEditer" scrollable persistent max-width="650px" transition="dialog-bottom-transition">
         <v-card class="px-2 py-4" rounded="lg">
           <v-card-title primary-title>Editer</v-card-title>
@@ -176,7 +184,7 @@ const retrieve = async () => {
   maxies.value = await $get("maxies");
 }
 onMounted(async () => {
-  retrieve();
+  await retrieve();
 });
 
 
