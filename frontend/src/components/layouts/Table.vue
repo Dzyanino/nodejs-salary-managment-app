@@ -137,10 +137,12 @@ const nomEnseignant = ref(null);
 const nbHeureEnseignant = ref(null);
 const tauxHoraireEnseignant = ref(null);
 
-
-onMounted(async () => {
+const retrieve = async () => {
   tableItems.value = await $get("enseignants");
   maxies.value = await $get("maxies");
+}
+onMounted(async () => {
+  retrieve();
 });
 
 
@@ -158,11 +160,11 @@ const displayEditDialog = (idEnseignant) => {
   tauxHoraireEnseignant.value = choosen.value.tauxHoraire;
   dialogEditer.value = true;
 };
-
 const displayDeleteDialog = (idEnseignant) => {
   prepareData(idEnseignant);
   dialogSupprimer.value = true;
 }
+
 
 const editerEnseignant = async (idEnseignant) => {
   message = await $post("edit-enseignant", {
@@ -173,18 +175,14 @@ const editerEnseignant = async (idEnseignant) => {
   });
 
   dialogEditer.value = false;
-  window.location.reload();
+  retrieve();
   console.log(message.message);
 };
 
 const supprimerEnseignant = async (idEnseignant) => {
-  message = await $delete("remove-enseignant", {
-    numEns: idEnseignant
-  });
-  // console.log(idEnseignant);
-
+  message = await $post("remove-enseignant", { "numEns": idEnseignant });
   dialogSupprimer.value = false;
-  window.location.reload();
+  retrieve();
   console.log(message.message);
 }
 </script>
