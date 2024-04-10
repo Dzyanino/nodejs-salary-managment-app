@@ -76,11 +76,8 @@ router.post('/add-enseignant', [
 
 // DELETE ONE --------------------------------------------------------------------
 router.delete('/remove-enseignant/:idEnseignant', async (request, response) => {
-    // const validationErrors = validationResult(request);
-    // if (!validationErrors.isEmpty()) {
-    // }
-    const idEns = parseInt(request.params.idEnseignant)
-    if (idEns == null || typeof(idEns) != "number") {
+    const idEns = request.params.idEnseignant
+    if (idEns == null || isNaN(parseInt(idEns))) {
         return response.status(400).json({ erreurs: "Identifiant erroné ou manquant" });
     }
 
