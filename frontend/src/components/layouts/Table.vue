@@ -180,7 +180,7 @@ const editerEnseignant = async (idEnseignant) => {
 };
 
 const supprimerEnseignant = async (idEnseignant) => {
-  message = await $post("remove-enseignant", { "numEns": idEnseignant });
+  message = await $delete("remove-enseignant/" + idEnseignant);
   dialogSupprimer.value = false;
   retrieve();
   console.log(message.message);

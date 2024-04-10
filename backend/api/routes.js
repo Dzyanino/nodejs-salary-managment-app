@@ -6,15 +6,15 @@ const { body, validationResult } = require("express-validator")
 
 // GET ALL --------------------------------------------------------------------
 router.get('/enseignants', async (request, response) => {
-    const enseignants = await SalEns.findAll({ order: [ 'numEns' ] }); // limit: 25,
+    const enseignants = await SalEns.findAll({ order: ['numEns'] }); // limit: 25,
     response.json(enseignants);
 });
 router.get('/maxies', async (request, response) => {
     const enseignants = await SalEns.findAll({
         attributes: [
-            [ sequelize.fn('MIN', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'minSalaire' ],
-            [ sequelize.fn('MAX', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'maxSalaire' ],
-            [ sequelize.fn('SUM', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'totalSalaire' ]
+            [sequelize.fn('MIN', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'minSalaire'],
+            [sequelize.fn('MAX', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'maxSalaire'],
+            [sequelize.fn('SUM', sequelize.literal('"nbHeure" * "tauxHoraire"')), 'totalSalaire']
         ]
     });
     response.json(enseignants);
@@ -75,18 +75,19 @@ router.post('/add-enseignant', [
 
 
 // DELETE ONE --------------------------------------------------------------------
-router.post('/remove-enseignant', [
-    body("numEns").isInt().notEmpty()
-], async (request, response) => {
-    const validationErrors = validationResult(request);
-    if (!validationErrors.isEmpty()) {
-        return response.status(400).json({ erreurs: validationErrors.array() });
+router.delete('/remove-enseignant/:idEnseignant', async (request, response) => {
+    // const validationErrors = validationResult(request);
+    // if (!validationErrors.isEmpty()) {
+    // }
+    const idEns = parseInt(request.params.idEnseignant)
+    if (idEns == null || typeof(idEns) != "number") {
+        return response.status(400).json({ erreurs: "Identifiant erroné ou manquant" });
     }
 
     try {
         await SalEns.destroy({
             where: {
-                numEns: request.body.numEns
+                numEns: parseInt(idEns)
             }
         });
         response.status(200).json({ message: "Enseignant supprimé" });
