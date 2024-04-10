@@ -26,7 +26,7 @@ onMounted(async () => {
   new Chart(dest.value, {
     type: "doughnut",
     data: {
-      labels: ["SALAIRE MINIMUM", "SALAIRE MAXIMUM", "MONTANT TOTAL"],
+      labels: ["SALAIRE MINIMUM", "SALAIRE MAXIMUM", "SALAIRE TOTAL"],
       datasets: [{
         data: [items.value.minSalaire, items.value.maxSalaire, items.value.totalSalaire],
         backgroundColor: [
