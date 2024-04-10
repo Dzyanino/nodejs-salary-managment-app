@@ -16,11 +16,13 @@ import { $get } from "../../plugins/axios"
 const dest = ref(null);
 const items = ref([]);
 
-onMounted(async () => {
-  dest.value = document.getElementById("graphe");
+const retrieve = async () => {
   items.value = await $get("maxies");
   items.value = items.value.shift();
-
+}
+onMounted(async () => {
+  dest.value = document.getElementById("graphe");
+  await retrieve();
   new Chart(dest.value, {
     type: "doughnut",
     data: {
@@ -33,11 +35,7 @@ onMounted(async () => {
           "#F0F4C3"
         ],
         borderColor: [
-          // "white"
           "rgba(0, 0, 0, 0.1)"
-          // "#ff0000",
-          // "#00e64d",
-          // "#0099ff"
         ],
         borderWidth: 3
       }]
@@ -46,6 +44,12 @@ onMounted(async () => {
       scales: {
         y: {
           beginAtZero: true
+        }
+      },
+      aspectRation: 1,
+      plugins: {
+        legend: {
+          position: "bottom"
         }
       }
     }

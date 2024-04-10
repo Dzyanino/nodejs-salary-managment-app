@@ -6,14 +6,6 @@
         </v-app-bar-nav-icon>
       </template>
       <v-app-bar-title class="d-none d-sm-flex text-button">Gestion des salaires des enseignants</v-app-bar-title>
-      <!-- <template v-slot:append>
-        <v-list-item class="rounded d-none d-sm-flex">
-          <a class="text-black text-decoration-none text-button" href="#tableau">Tableau</a>
-        </v-list-item>
-        <v-list-item class="rounded d-none d-sm-flex">
-          <a class="text-black text-decoration-none text-button" href="#graphe">Graphe</a>
-        </v-list-item>
-      </template> -->
     </v-app-bar>
 
     <v-navigation-drawer temporary v-model="navigation" class="bg-white">

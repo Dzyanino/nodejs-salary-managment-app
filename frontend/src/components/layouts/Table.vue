@@ -8,7 +8,7 @@
             class="border rounded-pill"></v-text-field>
         </v-col>
         <v-col cols="12" md="3" offset-md="3" class="d-flex justify-end">
-          <v-btn prepend-icon="mdi-plus" color="primary">Ajouter</v-btn>
+          <v-btn prepend-icon="mdi-plus" color="primary" @click="displayAddDialog()">Ajouter</v-btn>
         </v-col>
       </v-row>
       <v-data-table hover fixed-header id="tableau" :headers="tableHeaders" :items="tableItems" :search="search"
@@ -38,7 +38,8 @@
                   <v-list-item link prepend-icon="mdi-pencil"
                     @click="displayEditDialog(item.numEns)">Editer</v-list-item>
                   <v-divider></v-divider>
-                  <v-list-item link prepend-icon="mdi-delete" class="text-red-accent-4" @click="displayDeleteDialog(item.numEns)">Supprimer</v-list-item>
+                  <v-list-item link prepend-icon="mdi-delete" class="text-red-accent-4"
+                    @click="displayDeleteDialog(item.numEns)">Supprimer</v-list-item>
                 </v-list>
               </v-menu>
             </td>
@@ -46,14 +47,10 @@
         </template>
 
         <template v-slot:no-data>
-            <tr>
-              <td>Rien n'a été trouvé</td>
-            </tr>
+          <tr>
+            <td>Rien n'a été trouvé</td>
+          </tr>
         </template>
-
-        <!-- <template v-slot:footers>
-          <p>{{ maxies[0].minSalaire }}</p>
-        </template> -->
       </v-data-table>
 
       <v-dialog v-model="dialogEditer" scrollable persistent max-width="650px" transition="dialog-bottom-transition">
@@ -67,11 +64,13 @@
               </v-col>
 
               <v-col cols="12" md="5">
-                <v-text-field rounded="lg" variant="outlined" label="Nombre d'heures" v-model="nbHeureEnseignant"></v-text-field>
+                <v-text-field rounded="lg" variant="outlined" label="Nombre d'heures"
+                  v-model="nbHeureEnseignant"></v-text-field>
               </v-col>
 
               <v-col cols="12" md="6" offset="0" offset-md="1">
-                <v-text-field rounded="lg" variant="outlined" label="Taux horaire" v-model="tauxHoraireEnseignant"></v-text-field>
+                <v-text-field rounded="lg" variant="outlined" label="Taux horaire"
+                  v-model="tauxHoraireEnseignant"></v-text-field>
               </v-col>
 
             </v-row>
@@ -107,6 +106,35 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog v-model="dialogAjouter" scrollable persistent max-width="850px" transition="dialog-bottom-transition">
+        <v-card class="px-2 py-4" rounded="lg">
+          <v-card-title primary-title>Ajouter</v-card-title>
+          <v-card-item>
+            <v-row class="pt-2">
+
+              <v-col cols="12">
+                <v-text-field rounded="lg" variant="outlined" label="Nom" v-model="nomNew"></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="5">
+                <v-text-field rounded="lg" variant="outlined" label="Nombre d'heures"
+                  v-model="nbHeureNew"></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="6" offset="0" offset-md="1">
+                <v-text-field rounded="lg" variant="outlined" label="Taux horaire"
+                  v-model="tauxHoraireNew"></v-text-field>
+              </v-col>
+
+            </v-row>
+          </v-card-item>
+          <v-card-actions class="justify-end">
+            <v-btn flat color="secondary" @click="dialogAjouter = false">Annuler</v-btn>
+            <v-btn flat color="primary" @click="ajouterEnseignant()">Confirmer</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-responsive>
   </v-container>
 </template>
@@ -130,12 +158,18 @@ const search = ref(null);
 
 let message = null;
 
-const choosen = ref([]);
 const dialogEditer = ref(false);
 const dialogSupprimer = ref(false);
+const dialogAjouter = ref(false);
+
+const choosen = ref([]);
 const nomEnseignant = ref(null);
 const nbHeureEnseignant = ref(null);
 const tauxHoraireEnseignant = ref(null);
+
+const nomNew = ref(null);
+const nbHeureNew = ref(null);
+const tauxHoraireNew = ref(null);
 
 const retrieve = async () => {
   tableItems.value = await $get("enseignants");
@@ -164,6 +198,13 @@ const displayDeleteDialog = (idEnseignant) => {
   prepareData(idEnseignant);
   dialogSupprimer.value = true;
 }
+const displayAddDialog = () => {
+  nomNew.value = null;
+  nbHeureNew.value = null;
+  tauxHoraireNew.value = null;
+
+  dialogAjouter.value = true;
+}
 
 
 const editerEnseignant = async (idEnseignant) => {
@@ -182,6 +223,18 @@ const editerEnseignant = async (idEnseignant) => {
 const supprimerEnseignant = async (idEnseignant) => {
   message = await $delete("remove-enseignant/" + idEnseignant);
   dialogSupprimer.value = false;
+  retrieve();
+  console.log(message.message);
+};
+
+const ajouterEnseignant = async () => {
+  message = await $post("add-enseignant", {
+    nom: nomNew.value,
+    nbHeure: nbHeureNew.value,
+    tauxHoraire: tauxHoraireNew.value
+  });
+
+  dialogAjouter.value = false;
   retrieve();
   console.log(message.message);
 }
